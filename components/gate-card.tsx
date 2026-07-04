@@ -7,21 +7,36 @@ import {
   type ProtectedGate,
 } from "@/lib/trustpass-data"
 
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+]
+
+// Parse the wall-clock components of a `datetime-local` string
+// ("YYYY-MM-DDTHH:mm") directly, WITHOUT constructing a Date. Passing such a
+// string to `new Date()` interprets it in the runtime's local timezone, which
+// differs between the server (UTC) and the client, producing a hydration
+// mismatch. Formatting the raw components makes the output deterministic.
 function formatWindow(value?: string) {
   if (!value) return null
-  try {
-    // Use a fixed locale + timezone so server and client render identically
-    // (avoids hydration mismatches from differing runtime locales).
-    return new Date(value).toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: "UTC",
-    })
-  } catch {
-    return value
-  }
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(value)
+  if (!match) return value
+  const [, , month, day, hour, minute] = match
+  const monthLabel = MONTHS[Number(month) - 1] ?? month
+  const h = Number(hour)
+  const period = h >= 12 ? "PM" : "AM"
+  const hour12 = h % 12 === 0 ? 12 : h % 12
+  return `${monthLabel} ${Number(day)}, ${hour12}:${minute} ${period}`
 }
 
 export function GateCard({
