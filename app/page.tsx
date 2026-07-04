@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Toaster } from "sonner"
 import { TopBar } from "@/components/top-bar"
+import { WorkspaceSelector } from "@/components/workspace-selector"
 import { TabNav, type TabKey } from "@/components/tab-nav"
 import { ContentRulesPanel } from "@/components/content-rules-panel"
 import { PartnerClaimsPanel } from "@/components/partner-claims-panel"
@@ -37,6 +38,7 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-background">
       <TopBar />
+      <WorkspaceSelector />
       <TabNav active={tab} onChange={setTab} claimCount={pendingClaims} />
 
       <main className="mx-auto max-w-lg px-4 pt-4">

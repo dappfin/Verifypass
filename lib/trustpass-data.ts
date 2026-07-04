@@ -32,6 +32,21 @@ export type PartnerClaim = {
 export const CONNECTED_PROFILE =
   process.env.NEXT_PUBLIC_SKOOL_PROFILE_EMAIL ?? "Not connected"
 
+export type CommunityWorkspace = {
+  id: string
+  name: string
+  isDefault?: boolean
+}
+
+// Connected communities are sourced from the user's backend profile data so
+// the app stays universal and multi-tenant. These generic fallback labels are
+// used for mock UI states until real workspaces are fetched.
+export const CONNECTED_WORKSPACES: CommunityWorkspace[] = [
+  { id: "workspace-a", name: "Community Workspace A (Default)", isDefault: true },
+  { id: "workspace-b", name: "Community Workspace B" },
+  { id: "workspace-c", name: "Community Workspace C" },
+]
+
 export const DISCOVERED_CONTENT: DiscoveredContent[] = [
   { id: "course-access", name: "Course Access" },
   { id: "workshop-access", name: "Workshop Access" },
