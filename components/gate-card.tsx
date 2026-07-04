@@ -10,11 +10,14 @@ import {
 function formatWindow(value?: string) {
   if (!value) return null
   try {
-    return new Date(value).toLocaleString(undefined, {
+    // Use a fixed locale + timezone so server and client render identically
+    // (avoids hydration mismatches from differing runtime locales).
+    return new Date(value).toLocaleString("en-US", {
       month: "short",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "UTC",
     })
   } catch {
     return value
