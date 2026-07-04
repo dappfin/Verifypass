@@ -29,12 +29,6 @@ export default function Page() {
     setGates((prev) => prev.filter((g) => g.id !== id))
   }
 
-  const handleDecision = (id: string, status: "approved" | "rejected") => {
-    setClaims((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, status } : c)),
-    )
-  }
-
   return (
     <div className="min-h-screen bg-background">
       <TopBar />
@@ -49,7 +43,7 @@ export default function Page() {
             onRevoke={handleRevoke}
           />
         ) : (
-          <PartnerClaimsPanel claims={claims} onDecision={handleDecision} />
+          <PartnerClaimsPanel gates={gates} />
         )}
       </main>
 
