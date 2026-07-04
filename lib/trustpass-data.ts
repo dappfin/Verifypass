@@ -26,7 +26,11 @@ export type PartnerClaim = {
   submittedAt: string
 }
 
-export const CONNECTED_PROFILE = "takalaauli@gmail.com"
+// The connected Skool profile is provided via environment configuration so
+// no personal email address is committed to source control. It must be
+// prefixed with NEXT_PUBLIC_ because it is rendered in the client UI.
+export const CONNECTED_PROFILE =
+  process.env.NEXT_PUBLIC_SKOOL_PROFILE_EMAIL ?? "Not connected"
 
 export const DISCOVERED_CONTENT: DiscoveredContent[] = [
   { id: "intro-blueprint", name: "Intro Blueprint" },
