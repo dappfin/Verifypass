@@ -1,7 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { Check, ChevronDown, Lock, Package, ShieldCheck } from "lucide-react"
+import {
+  Check,
+  ChevronDown,
+  Lock,
+  Package,
+  Plus,
+  ShieldCheck,
+  X,
+} from "lucide-react"
 import { toast } from "sonner"
 import { SeatCounter } from "@/components/seat-counter"
 import { RuleTypeSelector } from "@/components/rule-type-selector"
@@ -32,11 +40,37 @@ export function ContentRulesPanel({
   // primary rule creation flow above).
   const [bundleEnabled, setBundleEnabled] = useState(false)
   const [bundledIds, setBundledIds] = useState<string[]>([])
+  const [customClassroomIds, setCustomClassroomIds] = useState<string[]>([])
+
+  // Explicit, individual classroom check-slots for the bundle add-on.
+  const bundleClassrooms = [
+    { id: "classroom-a", name: "Classroom Target A (e.g., Foundation Course)" },
+    { id: "classroom-b", name: "Classroom Target B (e.g., Advanced Vault)" },
+    {
+      id: "classroom-c",
+      name: "Classroom Target C (e.g., Implementation Blueprint)",
+    },
+    { id: "classroom-d", name: "Classroom Target D (e.g., Weekly Live Archive)" },
+  ]
 
   const toggleBundledClassroom = (id: string) => {
     setBundledIds((prev) =>
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
     )
+  }
+
+  const addCustomClassroom = () => {
+    setCustomClassroomIds((prev) => [...prev, ""])
+  }
+
+  const updateCustomClassroom = (index: number, value: string) => {
+    setCustomClassroomIds((prev) =>
+      prev.map((id, i) => (i === index ? value : id)),
+    )
+  }
+
+  const removeCustomClassroom = (index: number) => {
+    setCustomClassroomIds((prev) => prev.filter((_, i) => i !== index))
   }
 
   const handleActivate = () => {
@@ -212,41 +246,80 @@ export function ContentRulesPanel({
 
         {/* Classroom checklist */}
         {bundleEnabled && (
-          <ul className="space-y-2.5 border-t border-border pt-4">
-            {DISCOVERED_CONTENT.map((content) => {
-              const checked = bundledIds.includes(content.id)
-              return (
-                <li key={content.id}>
-                  <button
-                    type="button"
-                    role="checkbox"
-                    aria-checked={checked}
-                    onClick={() => toggleBundledClassroom(content.id)}
-                    className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3.5 text-left transition-colors ${
-                      checked
-                        ? "border-primary bg-accent"
-                        : "border-input bg-background"
-                    }`}
-                  >
-                    <span
-                      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors ${
+          <div className="space-y-4 border-t border-border pt-4">
+            <ul className="space-y-2.5">
+              {bundleClassrooms.map((classroom) => {
+                const checked = bundledIds.includes(classroom.id)
+                return (
+                  <li key={classroom.id}>
+                    <button
+                      type="button"
+                      role="checkbox"
+                      aria-checked={checked}
+                      onClick={() => toggleBundledClassroom(classroom.id)}
+                      className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3.5 text-left transition-colors ${
                         checked
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-muted-foreground/40 bg-transparent"
+                          ? "border-primary bg-accent"
+                          : "border-input bg-background"
                       }`}
                     >
-                      {checked && (
-                        <Check className="h-4 w-4" aria-hidden="true" />
-                      )}
-                    </span>
-                    <span className="text-base font-medium text-foreground">
-                      {content.name}
-                    </span>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
+                      <span
+                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors ${
+                          checked
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-muted-foreground/40 bg-transparent"
+                        }`}
+                      >
+                        {checked && (
+                          <Check className="h-4 w-4" aria-hidden="true" />
+                        )}
+                      </span>
+                      <span className="text-base font-medium text-foreground">
+                        {classroom.name}
+                      </span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+
+            {/* Custom Skool Classroom ID fields */}
+            {customClassroomIds.length > 0 && (
+              <ul className="space-y-2.5">
+                {customClassroomIds.map((value, index) => (
+                  <li key={index} className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={value}
+                      onChange={(e) =>
+                        updateCustomClassroom(index, e.target.value)
+                      }
+                      placeholder="Paste external Skool Classroom ID"
+                      className="h-12 flex-1 rounded-2xl border border-input bg-background px-4 text-base text-foreground outline-none transition-colors focus:border-primary"
+                      aria-label={`Custom Skool Classroom ID ${index + 1}`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeCustomClassroom(index)}
+                      aria-label={`Remove custom classroom ${index + 1}`}
+                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-input bg-background text-muted-foreground transition-colors hover:text-destructive"
+                    >
+                      <X className="h-5 w-5" aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <button
+              type="button"
+              onClick={addCustomClassroom}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-primary/50 bg-accent/40 px-4 py-3.5 text-base font-semibold text-primary transition-colors hover:bg-accent"
+            >
+              <Plus className="h-5 w-5" aria-hidden="true" />
+              Add Custom Classroom ID Field
+            </button>
+          </div>
         )}
       </section>
 
