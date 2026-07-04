@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronDown, Lock, ShieldCheck } from "lucide-react"
+import { Check, ChevronDown, Lock, Package, ShieldCheck } from "lucide-react"
 import { toast } from "sonner"
 import { SeatCounter } from "@/components/seat-counter"
 import { RuleTypeSelector } from "@/components/rule-type-selector"
@@ -27,6 +27,17 @@ export function ContentRulesPanel({
   const [ruleType, setRuleType] = useState<RuleType>("lifetime")
   const [windowStarts, setWindowStarts] = useState("")
   const [windowExpires, setWindowExpires] = useState("")
+
+  // Optional Multi-Course Bundle Add-on (self-contained, does not affect the
+  // primary rule creation flow above).
+  const [bundleEnabled, setBundleEnabled] = useState(false)
+  const [bundledIds, setBundledIds] = useState<string[]>([])
+
+  const toggleBundledClassroom = (id: string) => {
+    setBundledIds((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
+    )
+  }
 
   const handleActivate = () => {
     if (!nameNotice.trim()) {
@@ -164,6 +175,79 @@ export function ContentRulesPanel({
           <Lock className="h-5 w-5" aria-hidden="true" />
           ACTIVATE AUTOMATED LISTENER
         </button>
+      </section>
+
+      {/* Optional Multi-Course Bundle Add-on */}
+      <section className="space-y-4 rounded-3xl border border-border bg-card p-5 shadow-sm">
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-1">
+            <h2 className="flex items-center gap-2 text-base font-bold text-foreground">
+              <Package className="h-5 w-5 text-primary" aria-hidden="true" />
+              OPTIONAL: Multi-Course Bundle Add-on
+            </h2>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Enable this option to bundle 2-4 additional classrooms under a
+              single access proof loop.
+            </p>
+          </div>
+
+          {/* Toggle switch */}
+          <button
+            type="button"
+            role="switch"
+            aria-checked={bundleEnabled}
+            aria-label="Toggle multi-course bundle"
+            onClick={() => setBundleEnabled((prev) => !prev)}
+            className={`relative mt-0.5 inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors ${
+              bundleEnabled ? "bg-primary" : "bg-muted-foreground/30"
+            }`}
+          >
+            <span
+              className={`inline-block h-5 w-5 transform rounded-full bg-card shadow transition-transform ${
+                bundleEnabled ? "translate-x-6" : "translate-x-1"
+              }`}
+            />
+          </button>
+        </div>
+
+        {/* Classroom checklist */}
+        {bundleEnabled && (
+          <ul className="space-y-2.5 border-t border-border pt-4">
+            {DISCOVERED_CONTENT.map((content) => {
+              const checked = bundledIds.includes(content.id)
+              return (
+                <li key={content.id}>
+                  <button
+                    type="button"
+                    role="checkbox"
+                    aria-checked={checked}
+                    onClick={() => toggleBundledClassroom(content.id)}
+                    className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3.5 text-left transition-colors ${
+                      checked
+                        ? "border-primary bg-accent"
+                        : "border-input bg-background"
+                    }`}
+                  >
+                    <span
+                      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors ${
+                        checked
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-muted-foreground/40 bg-transparent"
+                      }`}
+                    >
+                      {checked && (
+                        <Check className="h-4 w-4" aria-hidden="true" />
+                      )}
+                    </span>
+                    <span className="text-base font-medium text-foreground">
+                      {content.name}
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </section>
 
       {/* Active Ledger */}
