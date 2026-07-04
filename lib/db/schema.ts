@@ -60,6 +60,7 @@ export const verification = pgTable("verification", {
 export const trustPassRule = pgTable("trust_pass_rule", {
   id: text("id").primaryKey(),
   userId: text("userId").notNull(),
+  nameNotice: text("nameNotice"), // internal label, e.g. "Partner Deal Name"
   creatorMemberId: text("creatorMemberId").notNull(),
   creatorEmail: text("creatorEmail").notNull(),
   creatorCommunityId: text("creatorCommunityId").notNull(),

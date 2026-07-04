@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
   }
 
   const {
+    nameNotice,
     creatorMemberId,
     creatorEmail,
     creatorCommunityId,
@@ -90,6 +91,7 @@ export async function POST(req: NextRequest) {
     .values({
       id: randomUUID(),
       userId: session.user.id,
+      nameNotice: nameNotice ? String(nameNotice).trim() || null : null,
       creatorMemberId: String(creatorMemberId).trim(),
       creatorEmail: String(creatorEmail).trim().toLowerCase(),
       creatorCommunityId: String(creatorCommunityId).trim(),

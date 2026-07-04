@@ -15,6 +15,7 @@ async function getUserId() {
 }
 
 export interface CreateRuleInput {
+  nameNotice?: string | null
   creatorMemberId: string
   creatorEmail: string
   creatorCommunityId: string
@@ -114,6 +115,7 @@ export async function createRule(
     .values({
       id: randomUUID(),
       userId,
+      nameNotice: input.nameNotice?.trim() || null,
       creatorMemberId: input.creatorMemberId.trim(),
       creatorEmail: input.creatorEmail.trim().toLowerCase(),
       creatorCommunityId: input.creatorCommunityId.trim(),
