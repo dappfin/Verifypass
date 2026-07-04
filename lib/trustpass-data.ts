@@ -33,11 +33,11 @@ export const CONNECTED_PROFILE =
   process.env.NEXT_PUBLIC_SKOOL_PROFILE_EMAIL ?? "Not connected"
 
 export const DISCOVERED_CONTENT: DiscoveredContent[] = [
-  { id: "intro-blueprint", name: "Intro Blueprint" },
-  { id: "premium-deep-dive", name: "Premium Deep-Dive" },
-  { id: "vip-master-plan", name: "VIP Master Plan" },
-  { id: "accelerator-cohort", name: "Accelerator Cohort" },
-  { id: "founders-inner-circle", name: "Founders Inner Circle" },
+  { id: "course-access", name: "Course Access" },
+  { id: "workshop-access", name: "Workshop Access" },
+  { id: "summit-pass", name: "Summit Pass" },
+  { id: "tool-software-access", name: "Tool / Software Access" },
+  { id: "webinar-live-call-access", name: "Webinar / Live Call Access" },
 ]
 
 export const RULE_TYPE_LABELS: Record<RuleType, string> = {
@@ -53,7 +53,7 @@ export const INITIAL_GATES: ProtectedGate[] = [
   {
     id: "gate-seed-1",
     nameNotice: "Jane Harbison - 50 Premium Promo Seats",
-    contentName: "Premium Deep-Dive",
+    contentName: "Course Access",
     ruleType: "lifetime",
     seatCapacity: 50,
     seatsFilled: 12,
@@ -62,7 +62,7 @@ export const INITIAL_GATES: ProtectedGate[] = [
   {
     id: "gate-seed-2",
     nameNotice: "Q3 Launch - VIP Early Access",
-    contentName: "VIP Master Plan",
+    contentName: "Summit Pass",
     ruleType: "time-limited",
     seatCapacity: 25,
     seatsFilled: 25,
@@ -76,7 +76,7 @@ export const INITIAL_CLAIMS: PartnerClaim[] = [
   {
     id: "claim-1",
     partnerEmail: "marcus@growthlabs.io",
-    contentName: "Premium Deep-Dive",
+    contentName: "Course Access",
     seatsRequested: 5,
     status: "pending",
     submittedAt: "2 hours ago",
@@ -84,7 +84,7 @@ export const INITIAL_CLAIMS: PartnerClaim[] = [
   {
     id: "claim-2",
     partnerEmail: "sara.lindqvist@nordicedu.se",
-    contentName: "VIP Master Plan",
+    contentName: "Summit Pass",
     seatsRequested: 3,
     status: "pending",
     submittedAt: "Yesterday",
@@ -92,7 +92,7 @@ export const INITIAL_CLAIMS: PartnerClaim[] = [
   {
     id: "claim-3",
     partnerEmail: "devteam@buildfast.co",
-    contentName: "Intro Blueprint",
+    contentName: "Workshop Access",
     seatsRequested: 10,
     status: "approved",
     submittedAt: "3 days ago",
